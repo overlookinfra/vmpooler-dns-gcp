@@ -1,10 +1,13 @@
-# frozen_string_literal: true
+source ENV['GEM_SOURCE'] || 'https://rubygems.org'
 
-source "https://rubygems.org"
-
-# Specify your gem's dependencies in vmpooler-dns-google-clouddns.gemspec
 gemspec
 
-gem "rake", "~> 13.0"
+# Evaluate Gemfile.local if it exists
+if File.exists? "#{__FILE__}.local"
+  instance_eval(File.read("#{__FILE__}.local"))
+end
 
-gem "rubocop", "~> 1.21"
+# Evaluate ~/.gemfile if it exists
+if File.exists?(File.join(Dir.home, '.gemfile'))
+  instance_eval(File.read(File.join(Dir.home, '.gemfile')))
+end
