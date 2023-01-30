@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
-require_relative "clouddns/version"
+require 'googleauth'
+require 'google/cloud/dns'
 
 module Vmpooler
-  module Dns
-    module Google
-      module Clouddns
-        class Error < StandardError; end
-        # Your code goes here...
+  class PoolManager
+    class Dns
+      class Google
+        class Clouddns
+          # Your code goes here...
+        end
       end
     end
   end
