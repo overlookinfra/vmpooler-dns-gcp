@@ -1,0 +1,10 @@
+module Vmpooler
+  module Dns
+    module Google
+      module Clouddns
+        VERSION: String
+        # See the writing guide of rbs: https://github.com/ruby/rbs#guides
+      end
+    end
+  end
+end
