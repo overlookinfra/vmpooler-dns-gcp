@@ -49,6 +49,16 @@ module Vmpooler
             connection.zone('vmpooler-example-com').add(hostname, 'A', 60, ip)
           end
 
+          def delete_record(hostname)
+            retries = 0
+            connection.zone('vmpooler-example-com').remove(hostname, 'A')
+          rescue Google::Cloud::FailedPreconditionError => e
+            # this error was experienced intermittently, will retry to see if it can complete successfully
+            # the error is Google::Cloud::FailedPreconditionError: conditionNotMet: Precondition not met for 'entity.change.deletions[1]'
+            sleep 5
+            retry if (retries += 1) < 30
+          end
+
           def connection
             @connection_pool.with_metrics do |pool_object|
               return ensured_gcp_connection(pool_object)
