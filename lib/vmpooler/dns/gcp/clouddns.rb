@@ -44,14 +44,19 @@ module Vmpooler
             'gcp-clouddns'
           end
 
+           # main configuration options
+          def zone_name
+            dns_config['zone_name']
+          end
+
           def create_or_replace_record(hostname)
             ip = get_ip(hostname)
-            connection.zone('vmpooler-example-com').add(hostname, 'A', 60, ip)
+            connection.zone(zone_name).add(hostname, 'A', 60, ip)
           end
 
           def delete_record(hostname)
             retries = 0
-            connection.zone('vmpooler-example-com').remove(hostname, 'A')
+            connection.zone(zone_name).remove(hostname, 'A')
           rescue Google::Cloud::FailedPreconditionError => e
             # this error was experienced intermittently, will retry to see if it can complete successfully
             # the error is Google::Cloud::FailedPreconditionError: conditionNotMet: Precondition not met for 'entity.change.deletions[1]'
