@@ -45,6 +45,10 @@ module Vmpooler
           end
 
            # main configuration options
+           def project
+            dns_config['project']
+          end
+
           def zone_name
             dns_config['zone_name']
           end
@@ -80,12 +84,11 @@ module Vmpooler
             retry_factor = global_config[:config]['retry_factor'] || 10
             try = 1
             begin
-              scopes = ['https://www.googleapis.com/auth/cloud-platform']
-  
-              Google::Auth.get_application_default(scopes)
+              Google::Cloud::Dns.configure do |config|
+                config.project_id = project
+              end
   
               dns = Google::Cloud::Dns.new
-              # dns.authorization = authorization
   
               metrics.increment('connect.open')
               dns
