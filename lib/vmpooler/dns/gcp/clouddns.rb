@@ -44,8 +44,8 @@ module Vmpooler
             'gcp-clouddns'
           end
 
-           # main configuration options
-           def project
+          # main configuration options
+          def project
             dns_config['project']
           end
 
@@ -55,7 +55,18 @@ module Vmpooler
 
           def create_or_replace_record(hostname)
             ip = get_ip(hostname)
-            connection.zone(zone_name).add(hostname, 'A', 60, ip)
+            begin
+              change = connection.zone(zone_name).add(hostname, 'A', 60, ip)
+              debug_logger("#{change.id} - #{change.started_at} - #{change.status} DNS address added") if change
+            rescue Google::Cloud::AlreadyExistsError => _e
+              # the error is Google::Cloud::AlreadyExistsError: alreadyExists: The resource 'entity.change.additions[0]' named 'instance-8.test.vmpooler.net. (A)' already exists
+              # the error is Google::Cloud::AlreadyExistsError: alreadyExists: The resource 'entity.change.additions[0]' named 'instance-8.test.vmpooler.net. (A)' already exists
+              change = connection.zone(zone_name).replace(hostname, 'A', 60, ip)
+              debug_logger("#{change.id} - #{change.started_at} - #{change.status} DNS address previously existed and was replaced") if change
+            rescue Google::Cloud::FailedPreconditionError => e
+              debug_logger("DNS create failed, retrying error: #{e}")
+              retry if (retries += 1) < 30
+            end
           end
 
           def delete_record(hostname)
@@ -64,6 +75,7 @@ module Vmpooler
           rescue Google::Cloud::FailedPreconditionError => e
             # this error was experienced intermittently, will retry to see if it can complete successfully
             # the error is Google::Cloud::FailedPreconditionError: conditionNotMet: Precondition not met for 'entity.change.deletions[1]'
+            debug_logger("GCP DNS delete_record failed, retrying error: #{e}")
             sleep 5
             retry if (retries += 1) < 30
           end
@@ -87,21 +99,28 @@ module Vmpooler
               Google::Cloud::Dns.configure do |config|
                 config.project_id = project
               end
-  
+
               dns = Google::Cloud::Dns.new
-  
+
               metrics.increment('connect.open')
               dns
             rescue StandardError => e
               metrics.increment('connect.fail')
               raise e if try >= max_tries
-  
+
               sleep(try * retry_factor)
               try += 1
               retry
             end
           end
 
+          # used in local dev environment, set DEBUG_FLAG=true
+          # this way the upstream vmpooler manager does not get polluted with logs
+          def debug_logger(message, send_to_upstream: false)
+            # the default logger is simple and does not enforce debug levels (the first argument)
+            puts message if ENV['DEBUG_FLAG']
+            logger.log('[g]', message) if send_to_upstream
+          end
         end
       end
     end
