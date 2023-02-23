@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'vmpooler', '>= 1.3.0', '~> 2.3'
 
   # Testing dependencies
+  spec.add_development_dependency 'mock_redis', '>= 0.17.0'
   spec.add_development_dependency 'rspec', '>= 3.2'
   spec.add_development_dependency 'rubocop', '~> 1.1.0'
   spec.add_development_dependency 'simplecov', '>= 0.11.2'

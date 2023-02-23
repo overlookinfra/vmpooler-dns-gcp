@@ -4,6 +4,12 @@ require 'simplecov'
 SimpleCov.start do
   add_filter '/spec/'
 end
+require 'helpers'
+require 'rspec'
+require 'vmpooler'
+require 'redis'
+require 'vmpooler/metrics'
+require 'clouddns_helper'
 
 def project_root_dir
   File.dirname(File.dirname(__FILE__))

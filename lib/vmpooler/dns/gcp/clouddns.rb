@@ -2,6 +2,7 @@
 
 require 'googleauth'
 require 'google/cloud/dns'
+require 'vmpooler/dns/base'
 
 module Vmpooler
   class PoolManager
@@ -54,30 +55,38 @@ module Vmpooler
           end
 
           def create_or_replace_record(hostname)
+            retries = 0
             ip = get_ip(hostname)
-            begin
-              change = connection.zone(zone_name).add(hostname, 'A', 60, ip)
-              debug_logger("#{change.id} - #{change.started_at} - #{change.status} DNS address added") if change
-            rescue Google::Cloud::AlreadyExistsError => _e
-              # the error is Google::Cloud::AlreadyExistsError: alreadyExists: The resource 'entity.change.additions[0]' named 'instance-8.test.vmpooler.net. (A)' already exists
-              # the error is Google::Cloud::AlreadyExistsError: alreadyExists: The resource 'entity.change.additions[0]' named 'instance-8.test.vmpooler.net. (A)' already exists
-              change = connection.zone(zone_name).replace(hostname, 'A', 60, ip)
-              debug_logger("#{change.id} - #{change.started_at} - #{change.status} DNS address previously existed and was replaced") if change
-            rescue Google::Cloud::FailedPreconditionError => e
-              debug_logger("DNS create failed, retrying error: #{e}")
-              retry if (retries += 1) < 30
+            if ip.nil?
+              debug_logger("An IP Address was not recorded for #{hostname}")
+            else
+              begin
+                change = connection.zone(zone_name).add(hostname, 'A', 60, ip)
+                debug_logger("#{change.id} - #{change.started_at} - #{change.status} DNS address added") if change
+              rescue Google::Cloud::AlreadyExistsError => _e
+                # the error is Google::Cloud::AlreadyExistsError: alreadyExists: The resource 'entity.change.additions[0]' named 'instance-8.test.vmpooler.net. (A)' already exists
+                # the error is Google::Cloud::AlreadyExistsError: alreadyExists: The resource 'entity.change.additions[0]' named 'instance-8.test.vmpooler.net. (A)' already exists
+                change = connection.zone(zone_name).replace(hostname, 'A', 60, ip)
+                debug_logger("#{change.id} - #{change.started_at} - #{change.status} DNS address previously existed and was replaced") if change
+              rescue Google::Cloud::FailedPreconditionError => e
+                debug_logger("DNS create failed, retrying error: #{e}")
+                sleep 5
+                retry if (retries += 1) < 30
+              end
             end
           end
 
           def delete_record(hostname)
             retries = 0
-            connection.zone(zone_name).remove(hostname, 'A')
-          rescue Google::Cloud::FailedPreconditionError => e
-            # this error was experienced intermittently, will retry to see if it can complete successfully
-            # the error is Google::Cloud::FailedPreconditionError: conditionNotMet: Precondition not met for 'entity.change.deletions[1]'
-            debug_logger("GCP DNS delete_record failed, retrying error: #{e}")
-            sleep 5
-            retry if (retries += 1) < 30
+            begin
+              connection.zone(zone_name).remove(hostname, 'A')
+            rescue Google::Cloud::FailedPreconditionError => e
+              # this error was experienced intermittently, will retry to see if it can complete successfully
+              # the error is Google::Cloud::FailedPreconditionError: conditionNotMet: Precondition not met for 'entity.change.deletions[1]'
+              debug_logger("GCP DNS delete_record failed, retrying error: #{e}")
+              sleep 5
+              retry if (retries += 1) < 30
+            end
           end
 
           def connection
@@ -87,8 +96,15 @@ module Vmpooler
           end
 
           def ensured_gcp_connection(connection_pool_object)
-            connection_pool_object[:connection] = connect_to_gcp unless connection_pool_object[:connection]
+            connection_pool_object[:connection] = connect_to_gcp unless gcp_connection_ok?(connection_pool_object[:connection])
             connection_pool_object[:connection]
+          end
+
+          def gcp_connection_ok?(connection)
+            _result = connection.id
+            true
+          rescue StandardError
+            false
           end
 
           def connect_to_gcp
