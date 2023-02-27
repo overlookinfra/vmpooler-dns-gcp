@@ -1,14 +1,33 @@
 # vmpooler-dns-gcp
 
 - [vmpooler-dns-gcp](#vmpooler-dns-gcp)
+  - [Requirements](#requirements)
   - [Usage](#usage)
   - [Update the Gemfile Lock](#update-the-gemfile-lock)
   - [Releasing](#releasing)
   - [License](#license)
 
+## Requirements
+
+1. A Google Cloud Project with the [Cloud DNS](https://cloud.google.com/dns/) enabled.
+2. A custom IAM role with the permissions listed in `util/vmpooler-dns-gcp-role.yaml`.
+3. A service account assigned to the custom role above.
+4. A service account key, using the account above, exported as `GOOGLE_APPLICATION_CREDENTIALS` where VMPooler is run.
+
 ## Usage
 
-Examples of deploying VMPooler with extra providers can be found in the [puppetlabs/vmpooler-deployment](https://github.com/puppetlabs/vmpooler-deployment) repository.
+Example dns config setup:
+
+```yaml
+:dns_configs:
+  :example:
+    dns_class: gcp
+    project: vmpooler-example
+    domain: vmpooler.example.com
+    zone_name: vmpooler-example-com
+```
+
+Examples of deploying VMPooler with dns configs can be found in the [puppetlabs/vmpooler-deployment](https://github.com/puppetlabs/vmpooler-deployment) repository.
 
 ## Update the Gemfile Lock
 
