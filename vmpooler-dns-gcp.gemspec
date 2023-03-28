@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.add_dependency "googleauth", ">= 0.16.2", "< 1.3.0"
   spec.add_dependency "google-cloud-dns", "~> 0.35.1"
-  spec.add_dependency 'vmpooler', '>= 1.3.0', '~> 2.3'
+  spec.add_dependency 'vmpooler', '~> 3.0'
 
   # Testing dependencies
   spec.add_development_dependency 'mock_redis', '>= 0.17.0'
