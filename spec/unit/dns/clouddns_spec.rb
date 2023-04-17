@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'mock_redis'
-require 'vmpooler/dns/gcp/clouddns'
+require 'vmpooler/dns/gcp'
 
 describe 'Vmpooler::PoolManager::Dns::Gcp' do
   let(:logger) { MockLogger.new }
@@ -16,7 +16,7 @@ describe 'Vmpooler::PoolManager::Dns::Gcp' do
     retry_factor: 10
   :dns_configs:
     :#{name}:
-      dns_class: gcp-clouddns
+      dns_class: gcp
       project: vmpooler-example
       domain: vmpooler.example.com
       zone_name: vmpooler-example-com
@@ -50,11 +50,11 @@ EOT
     ) { MockRedis.new }
   end
 
-  subject { Vmpooler::PoolManager::Dns::Gcp::Clouddns.new(config, logger, metrics, redis_connection_pool, name, options) }
+  subject { Vmpooler::PoolManager::Dns::Gcp.new(config, logger, metrics, redis_connection_pool, name, options) }
 
   describe '#name' do
-    it 'should be gcp-clouddns' do
-      expect(subject.name).to eq('gcp-clouddns')
+    it 'should be gcp' do
+      expect(subject.name).to eq('gcp')
     end
   end
 
