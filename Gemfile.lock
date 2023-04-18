@@ -62,6 +62,7 @@ GEM
     mustermann (2.0.2)
       ruby2_keywords (~> 0.0.1)
     net-ldap (0.17.1)
+    nio4r (2.5.8)
     nio4r (2.5.8-java)
     opentelemetry-api (1.1.0)
     opentelemetry-common (0.19.6)
@@ -107,6 +108,8 @@ GEM
     pickup (0.0.11)
     prometheus-client (2.1.0)
     public_suffix (5.0.1)
+    puma (5.6.5)
+      nio4r (~> 2.0)
     puma (5.6.5-java)
       nio4r (~> 2.0)
     rack (2.2.6.4)
@@ -197,7 +200,6 @@ GEM
     zonefile (1.06)
 
 PLATFORMS
-  universal-java-1.8
   universal-java-11
 
 DEPENDENCIES
@@ -208,4 +210,4 @@ DEPENDENCIES
   vmpooler-dns-gcp!
 
 BUNDLED WITH
-   2.4.5
+   2.4.10
