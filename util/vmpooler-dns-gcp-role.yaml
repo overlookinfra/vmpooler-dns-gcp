@@ -1,0 +1,14 @@
+title: VMPooler DNS GCP
+description: VMPooler DNS GCP Plugin
+stage: GA
+includedPermissions:
+- dns.changes.create
+- dns.changes.get
+- dns.changes.list
+- dns.managedZones.get
+- dns.managedZones.list
+- dns.resourceRecordSets.create
+- dns.resourceRecordSets.update
+- dns.resourceRecordSets.delete
+- dns.resourceRecordSets.get
+- dns.resourceRecordSets.list
