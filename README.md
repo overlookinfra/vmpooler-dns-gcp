@@ -1,6 +1,6 @@
-# vmpooler-dns-google-clouddns
+# vmpooler-dns-gcp
 
-- [vmpooler-dns-google-clouddns](#vmpooler-dns-google-clouddns)
+- [vmpooler-dns-gcp](#vmpooler-dns-gcp)
   - [Usage](#usage)
   - [Update the Gemfile Lock](#update-the-gemfile-lock)
   - [Releasing](#releasing)
@@ -20,7 +20,7 @@ Verify, and update if needed, that the docker tag in the script and GitHub actio
 
 Follow these steps to publish a new GitHub release, and build and push the gem to <https://rubygems.org>.
 
-1. Bump the "VERSION" in `lib/vmpooler-dns-google-clouddns/version.rb` appropriately based on changes in `CHANGELOG.md` since the last release.
+1. Bump the "VERSION" in `lib/vmpooler-dns-gcp/version.rb` appropriately based on changes in `CHANGELOG.md` since the last release.
 2. Run `./update-gemfile-lock` to update `Gemfile.lock`.
 3. Run `./update-changelog` to update `CHANGELOG.md`.
 4. Commit and push changes to a new branch, then open a pull request against `main` and be sure to add the "maintenance" label.
@@ -28,4 +28,4 @@ Follow these steps to publish a new GitHub release, and build and push the gem t
 
 ## License
 
-vmpooler-dns-google-clouddns is distributed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html). See the [LICENSE](LICENSE) file for more details.
+vmpooler-dns-gcp is distributed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html). See the [LICENSE](LICENSE) file for more details.

@@ -6,7 +6,7 @@ require 'google/cloud/dns'
 module Vmpooler
   class PoolManager
     class Dns
-      class Google
+      class Gcp
         class Clouddns
           # Your code goes here...
         end

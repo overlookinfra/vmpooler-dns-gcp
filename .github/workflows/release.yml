@@ -5,7 +5,7 @@ on: workflow_dispatch
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: github.repository == 'puppetlabs/vmpooler-dns-google-clouddns'
+    if: github.repository == 'puppetlabs/vmpooler-dns-gcp'
     steps:
       - uses: actions/checkout@v3
 
@@ -25,9 +25,9 @@ jobs:
       - name: Get Next Version
         id: nv
         run: |
-          version=$(grep VERSION lib/vmpooler-dns-google-clouddns/version.rb |rev |cut -d "'" -f2 |rev)
+          version=$(grep VERSION lib/vmpooler-dns-gcp/version.rb |rev |cut -d "'" -f2 |rev)
           echo "version=$version" >> $GITHUB_OUTPUT
-          echo "Found version $version from lib/vmpooler-dns-google-clouddns/version.rb"
+          echo "Found version $version from lib/vmpooler-dns-gcp/version.rb"
 
       - name: Generate Changelog
         uses: docker://githubchangeloggenerator/github-changelog-generator:1.16.2
