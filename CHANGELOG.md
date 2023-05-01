@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.0](https://github.com/puppetlabs/vmpooler-dns-gcp/tree/1.1.0) (2023-05-01)
+
+[Full Changelog](https://github.com/puppetlabs/vmpooler-dns-gcp/compare/1.0.0...1.1.0)
+
+**Merged pull requests:**
+
+- Migrate issue management to Jira [\#4](https://github.com/puppetlabs/vmpooler-dns-gcp/pull/4) ([yachub](https://github.com/yachub))
+- Bump jruby to 9.4.2.0 [\#3](https://github.com/puppetlabs/vmpooler-dns-gcp/pull/3) ([yachub](https://github.com/yachub))
+
 ## [1.0.0](https://github.com/puppetlabs/vmpooler-dns-gcp/tree/1.0.0) (2023-04-19)
 
 [Full Changelog](https://github.com/puppetlabs/vmpooler-dns-gcp/compare/0.0.1...1.0.0)
