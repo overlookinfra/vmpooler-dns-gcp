@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/puppetlabs/vmpooler-dns-gcp/tree/1.2.0) (2023-08-10)
+
+[Full Changelog](https://github.com/puppetlabs/vmpooler-dns-gcp/compare/1.1.0...1.2.0)
+
+**Implemented enhancements:**
+
+- Bump jruby to 9.4.3.0 and update lockfile [\#7](https://github.com/puppetlabs/vmpooler-dns-gcp/pull/7) ([yachub](https://github.com/yachub))
+
 ## [1.1.0](https://github.com/puppetlabs/vmpooler-dns-gcp/tree/1.1.0) (2023-05-01)
 
 [Full Changelog](https://github.com/puppetlabs/vmpooler-dns-gcp/compare/1.0.0...1.1.0)
