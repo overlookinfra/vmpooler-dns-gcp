@@ -57,12 +57,12 @@ module Vmpooler
             debug_logger("An IP Address was not recorded for #{hostname}")
           else
             begin
-              change = connection.zone(zone_name).add(hostname, 'A', 60, ip)
+              change = connection.zone(zone_name).add(hostname, 'A', 3600, ip)
               debug_logger("#{change.id} - #{change.started_at} - #{change.status} DNS address added") if change
             rescue Google::Cloud::AlreadyExistsError => _e
               # the error is Google::Cloud::AlreadyExistsError: alreadyExists: The resource 'entity.change.additions[0]' named 'instance-8.test.vmpooler.net. (A)' already exists
               # the error is Google::Cloud::AlreadyExistsError: alreadyExists: The resource 'entity.change.additions[0]' named 'instance-8.test.vmpooler.net. (A)' already exists
-              change = connection.zone(zone_name).replace(hostname, 'A', 60, ip)
+              change = connection.zone(zone_name).replace(hostname, 'A', 3600, ip)
               debug_logger("#{change.id} - #{change.started_at} - #{change.status} DNS address previously existed and was replaced") if change
             rescue Google::Cloud::FailedPreconditionError => e
               debug_logger("DNS create failed, retrying error: #{e}")
